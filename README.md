@@ -1,5 +1,5 @@
 # SocialEventGuestDatabase
- Guest Database written in Django. Used to keep track of social event guests
+ Web-App based Guest Database written in Django. Used to keep track of social event guests
 
 v1.0
 
