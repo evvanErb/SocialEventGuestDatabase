@@ -10,3 +10,4 @@ Short Term Goals:
 
 Long Term Goals:
 - OpenCV Facial Recognition
+- Name searching approximation
