@@ -11,7 +11,10 @@ def retrieveGuest(request):
 	return render(request, 'entries/retrieveGuest.html')
 
 def retrievingGuest(request):
-	if(Guest.objects.filter(firstName=request.GET["firstName"], lastName=request.GET["lastName"]).exists()):
+	if(checkForErrors(request) != None):
+			return errorPage(request, checkForErrors(request))
+			
+	elif(Guest.objects.filter(firstName=request.GET["firstName"], lastName=request.GET["lastName"]).exists()):
 		return guestFound(request) 
 		
 	else:
@@ -39,6 +42,9 @@ def guestNotFound(request):
 	return render(request, 'entries/guestNotFound.html')
 	
 def guestCreated(request):
+	if(checkForErrors(request) != None):
+		return errorPage(request, checkForErrors(request))
+	
 	blackListedInput = False
 	if(request.GET["blackListed"] == 'Yes'):
 		blackListedInput = True
@@ -54,3 +60,16 @@ def guestCreated(request):
 		
 	data = {"alreadyThere":alreadyThere}
 	return render(request, 'entries/guestCreated.html', data)
+	
+def errorPage(request, errors):
+	return render(request, 'entries/errorPage.html', {"errors":errors})
+	
+def checkForErrors(request):
+	errors = []
+	for item in request.GET:
+		if(request.GET[item] == ""):
+			errors.append("[!] Error: " + item + " not inputed")
+	
+	if(len(errors) != 0):
+		return(errors)
+	return(None)

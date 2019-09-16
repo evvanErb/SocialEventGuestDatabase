@@ -22,7 +22,7 @@ PATH = '/media/'
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__))) + '/media'
 
 from pages.views import homePage, passwordPreEnterGuest
-from entries.views import enterGuest, retrieveGuest, guestCreated, retrievingGuest
+from entries.views import enterGuest, retrieveGuest, guestCreated, retrievingGuest, errorPage
 
 urlpatterns = [
     path('', homePage, name='homePage'),
@@ -31,5 +31,6 @@ urlpatterns = [
     path('guestCreated/', guestCreated, name='guestCreated'),
     path('passwordPreEnterGuest/', passwordPreEnterGuest, name='passwordPreEnterGuest'),
     path('retrievingGuest/', retrievingGuest, name='retrievingGuest'),
+    path('errorPage/', errorPage, name='errorPage'),
     path('admin/', admin.site.urls),
 ]
