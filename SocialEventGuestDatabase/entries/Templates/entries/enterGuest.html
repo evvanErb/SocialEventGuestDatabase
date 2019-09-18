@@ -38,46 +38,13 @@
 		</nav>
 		<div class="container">
 			<h1 class="text-center">Enter your Guest</h1> <br/> <br/>
-			<form class="text-center" action="/guestCreated/" method="get">
-				<div class="form-group">
-					<label for="eventName">First Name</label>
-					<input type="text" class="form-control" name="firstName" id="firstName" placeholder="First Name">
-				</div>
-				<div class="form-group">
-					<label for="eventName">Last Name</label>
-					<input type="text" class="form-control" name="lastName" id="lastName" placeholder="Last Name">
-				</div>
-				<div class="form-group">
-					<p>
-						<label>Black Listed:</label>
-						<select id = "blackListed" name="blackListed">
-							<option value = "No">No</option>
-							<option value = "Yes">Yes</option>
-						</select>
-					</p>
-				</div>
-				<div class="form-group">
-					<label for="eventDescription">Photo</label>
-					<input type="file" accept="image/*" class="form-control" name="photo" id="photo" placeholder="Upload Image">
-				</div>
-				<div class="form-group">
-					<label for="eventDescription">Friends with?</label>
-					<input type="text" class="form-control" name="friendsWith" id="friendsWith" placeholder="Knows?">
-				</div>
-				<div class="form-group">
-					<label for="eventDescription">Age</label>
-					<input type="number" class="form-control" name="ageWhenEntered" id="ageWhenEntered" placeholder="Age">
-				</div>
-				<div class="form-group">
-					<label for="eventDescription">Notes</label>
-					<input type="text" class="form-control" name="notes" id="notes" placeholder="Notes">
-				</div>
-
-
-			<bu>
-				<input class="btn btn-primary" type="submit" value="Submit">
-			</bu> <br/> <br/>
-			</form>
+			<center>
+			<form method="POST" class="post-form" enctype="multipart/form-data" action="/guestCreated/">  
+				{% csrf_token %}  
+				{{ form.as_p }}  
+				<button type="submit" class="save btn btn-default">Submit</button>  
+			</form>  
+			</center>
 		</div>
 
 		<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->

@@ -4,8 +4,13 @@ from datetime import date
 
 from .models import Guest
 
+from .forms import GuestForm
+
+from .functions.functions import handle_uploaded_photo
+
 def enterGuest(request):
-	return render(request, 'entries/enterGuest.html')
+	guest = GuestForm()
+	return render(request, 'entries/enterGuest.html',{'form':guest})
 	
 def retrieveGuest(request):
 	return render(request, 'entries/retrieveGuest.html')
@@ -42,24 +47,39 @@ def guestNotFound(request):
 	return render(request, 'entries/guestNotFound.html')
 	
 def guestCreated(request):
-	if(checkForErrors(request) != None):
-		return errorPage(request, checkForErrors(request))
+	# if this is a POST request we need to process the form data
+	if request.method == 'POST':
+		guest = GuestForm(request.POST, request.FILES)  
+		if guest.is_valid():
+			handle_uploaded_photo(request.FILES['photo']) 
+			 
+			firstNameInput = guest.cleaned_data["firstName"]
+			lastNameInput = guest.cleaned_data["lastName"]
+			blackListedInput = guest.cleaned_data["blackListed"]
+			photoInput = guest.cleaned_data["photo"]
+			friendsWithInput = guest.cleaned_data["friendsWith"]
+			ageWhenEnteredInput = guest.cleaned_data["ageWhenEntered"]
+			notesInput = guest.cleaned_data["notes"]
+			
+			
+			if(Guest.objects.filter(firstName=firstNameInput, lastName=lastNameInput).exists()):
+				alreadyThere = "Guest Already Entered"
+			
+			else:
+				alreadyThere = "New guest Created"
+			
+				newGuest = Guest.objects.create(firstName = firstNameInput, lastName = lastNameInput, blackListed = blackListedInput, photo = photoInput, friendsWith = friendsWithInput, ageWhenEntered = ageWhenEnteredInput, notes = notesInput, dateEntered = date.today().strftime("%Y-%m-%d"))
+			
+				newGuest.save() 
+		
+			data = {"alreadyThere":alreadyThere}
+			return render(request, 'entries/guestCreated.html', data)
+			
+		else:
+				return errorPage(request, checkForErrors(request))
 	
-	blackListedInput = False
-	if(request.GET["blackListed"] == 'Yes'):
-		blackListedInput = True
-		
-	if(Guest.objects.filter(firstName=request.GET["firstName"], lastName=request.GET["lastName"]).exists()):
-		alreadyThere = "Guest Already Entered"
-		
 	else:
-		alreadyThere = "New guest Created"
-		newGuest = Guest.objects.create(firstName = request.GET["firstName"], lastName = request.GET["lastName"], blackListed = blackListedInput, photo = request.GET["photo"], friendsWith = request.GET["friendsWith"], ageWhenEntered = request.GET["ageWhenEntered"], notes = request.GET["notes"], dateEntered = date.today().strftime("%Y-%m-%d"))
-		
-		newGuest.save()
-		
-	data = {"alreadyThere":alreadyThere}
-	return render(request, 'entries/guestCreated.html', data)
+		return errorPage(request, checkForErrors(request))
 	
 def errorPage(request, errors):
 	return render(request, 'entries/errorPage.html', {"errors":errors})

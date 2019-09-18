@@ -4,8 +4,11 @@
 v1.1.0
 
 Short Term Goals:
+- Refactor Code
+- Better Comment Code
 - Needs better Error Handling
-- Password Protected Page before Enter Guest page written but not implemented
+- Make password protected page's password changeable via admin not hard coded
+- Make guest entry page none path traversable without password protected page
 - Make the site look better (HTML / CSS)
 
 Long Term Goals:
