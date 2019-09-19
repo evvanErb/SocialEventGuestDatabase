@@ -1,0 +1,1 @@
+Guest pictures are stored in this directory
