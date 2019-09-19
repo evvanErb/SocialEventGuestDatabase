@@ -1,6 +1,7 @@
 from django.shortcuts import render, get_object_or_404
 
-from datetime import date
+from django.utils import timezone
+import datetime
 
 from .models import Guest
 
@@ -63,9 +64,6 @@ def guestCreated(request):
 		guest = GuestForm(request.POST, request.FILES)  
 		#If form valid
 		if guest.is_valid():
-			#Upload the provided photo
-			handle_uploaded_photo(request.FILES['photo']) 
-			 
 			#Set new guest data to variables
 			firstNameInput = guest.cleaned_data["firstName"]
 			lastNameInput = guest.cleaned_data["lastName"]
@@ -81,9 +79,13 @@ def guestCreated(request):
 			
 			else:
 				alreadyThere = "New guest Created"
+				
+				#Upload the provided photo
+				handle_uploaded_photo(request.FILES['photo']) 
+				 
 			
 				#Create and save new guest
-				newGuest = Guest.objects.create(firstName = firstNameInput, lastName = lastNameInput, blackListed = blackListedInput, photo = photoInput, friendsWith = friendsWithInput, ageWhenEntered = ageWhenEnteredInput, notes = notesInput, dateEntered = date.today().strftime("%Y-%m-%d"))
+				newGuest = Guest.objects.create(firstName = firstNameInput, lastName = lastNameInput, blackListed = blackListedInput, photo = photoInput, friendsWith = friendsWithInput, ageWhenEntered = ageWhenEnteredInput, notes = notesInput, dateEntered = datetime.datetime.now(tz=timezone.utc))
 			
 				newGuest.save() 
 		
@@ -93,7 +95,7 @@ def guestCreated(request):
 			return render(request, 'entries/guestCreated.html', data)
 			
 		else:
-				return errorPage(request, checkForErrors(request))
+			return errorPage(request, checkForErrors(request))
 	
 	else:
 		return errorPage(request, checkForErrors(request))
