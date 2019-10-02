@@ -1,6 +1,8 @@
 #Python 3.x
 
 import face_recognition
+import numpy as np
+from ..models import Guest
 
 MIN_MATCHES_REQUIRED = 1
 MAX_DISTANCE = 0.58
@@ -64,13 +66,35 @@ def recognizeFace(database, faceEncoding):
 def detectAndRecognizeFacesInImage(image,
     database):
     """
-    Detects and recognizies faces in image then paints recognition info on image
+    Detects and recognizies faces in image
     """
     #Detect if there are any faces in the frame and get their locations
     faceLocations = hogDetectFaceLocations(image)
 
-    #Get detected faces encoding from embedding model
-    faceEncodings = face_recognition.face_encodings(image, faceLocations[0])
+    #Get detected face encoding from embedding model
+    faceEncoding = face_recognition.face_encodings(image, faceLocations[0])
 
     #See who from database matches best
     bestMatch = recognizeFace(database, faceEncoding)
+
+def setupDatabase():
+    guests = Guest.objects.all()
+    database = {}
+
+    for guest in guests:
+        textEncoding = guest.getEncoding()
+        database[guest.__str__()] = np.array(textEncoding)
+
+    return (database)
+
+def addFace(image):
+    """
+    Detects and encodes faces in image
+    """
+    #Detect if there are any faces in the frame and get their locations
+    faceLocations = hogDetectFaceLocations(image)
+
+    #Get detected face encoding from embedding model
+    faceEncoding = face_recognition.face_encodings(image, faceLocations)[0]
+
+    return (faceEncoding)
