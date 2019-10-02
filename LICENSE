@@ -672,3 +672,15 @@ may consider it more useful to permit linking proprietary applications with
 the library.  If this is what you want to do, use the GNU Lesser General
 Public License instead of this License.  But first, please read
 <https://www.gnu.org/licenses/why-not-lgpl.html>.
+
+Credits
+This application uses Open Source components.
+ You can find the source code of their open source projects along with license
+ information below. We acknowledge and are grateful to these developers for
+ their contributions to open source.
+
+Project: facialRecognitionCommandLineProgram
+ https://github.com/evvanErb/facialRecognitionCommandLineProgram
+Copyright (c) 2019 Evvan Erb
+License (MIT)
+ https://github.com/evvanErb/facialRecognitionCommandLineProgram/blob/master/LICENSE
